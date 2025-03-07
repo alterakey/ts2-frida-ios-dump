@@ -45,8 +45,14 @@ file_dict = {}
 
 finished = threading.Event()
 
+def get_remote_device(host):
+    return frida.get_device_manager().add_remote_device(host)
 
 def get_usb_iphone():
+    remote = os.environ.get('FRIDA_HOST', '')
+    if remote:
+        return get_remote_device(remote)
+    
     Type = 'usb'
     if int(frida.__version__.split('.')[0]) < 12:
         Type = 'tether'
